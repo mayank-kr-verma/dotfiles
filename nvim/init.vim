@@ -1,8 +1,8 @@
-set tabstop=4 softtabstop=4
+set nu rnu
+set tabstop=5 softtabstop=4
 set shiftwidth=4
 set expandtab
 set smartindent
-set nu rnu
 set incsearch
 set nohlsearch
 set smartcase
@@ -14,19 +14,17 @@ set clipboard^=unnamed,unnamedplus
 set noswapfile
 set nobackup
 
-call plug#begin('C:\Users\MMAYANKK\AppData\Local\nvim-data\plugged')
-Plug 'gruvbox-community/gruvbox'
+call plug#begin('~/.config/nvim-data/plugged')
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 Plug 'preservim/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'junegunn/goyo.vim'
-Plug 'ThePrimeagen/vim-be-good'
 Plug 'ryanoasis/vim-devicons'
 Plug 'rstacruz/vim-closer'
 Plug 'luochen1990/rainbow'
-Plug 'neoclide/coc.nvim'
-Plug 'preservim/tagbar'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'github/copilot.vim'
 call plug#end()
 
 " move around easier (might need changes)
@@ -39,7 +37,7 @@ nnoremap <C-H> <C-W><C-H>
 inoremap jj <esc>
 
 " to map <space>p as paste last copied
-let mapleader=" "
+let mapleader="/"
 nnoremap <leader>p "0p
 
 " natural splits
@@ -57,17 +55,10 @@ let g:airline#extensions#tabline#enabled = 1
 " colored brackets
 let g:rainbow_active = 1
 
-" for COC completions with tab and shift-tab
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
 
 " for tagbar
 nnoremap <F8> :TagbarToggle<CR>
+
+" to run current file with python inside vim terminal
+inoremap <F3> <Esc>:w<CR>:!python3 %:p<CR>
+nnoremap <F3> :w<CR>:!python3 %:p<CR>
