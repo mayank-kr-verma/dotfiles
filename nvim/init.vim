@@ -55,7 +55,6 @@ let g:airline#extensions#tabline#enabled = 1
 " colored brackets
 let g:rainbow_active = 1
 
-
 " for tagbar
 nnoremap <F8> :TagbarToggle<CR>
 
