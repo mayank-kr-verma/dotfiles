@@ -11,79 +11,73 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public LicensezZZ
+You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
 
-#define U_NP KC_NO // key is not present
-#define U_NA KC_NO // present but not available for use
-#define U_NU KC_NO // available but not used
+// Colemak-DH layout mirroring the user's 36-key Skeletyl (ZMK).
+// jj50 is a 5x12 ortho: the 10-key alpha block lives in c1..c10,
+// flanked by an edge utility column (c0) and an edge symbol column (c11).
+// Layer order matches skeletyl: lt 1 -> _LOWER, lt 2 -> _RAISE.
 
-#define U_RDO C(KC_Y)
-#define U_PST C(KC_V)
-#define U_CPY C(KC_C)
-#define U_CUT C(KC_X)
-#define U_UND C(KC_Z)
+enum layers { _BASE, _LOWER, _RAISE };
 
-// Left-hand home row mods
+// Home-row mods — EXACT skeletyl assignment
+// Left hand
 #define GUI_A LGUI_T(KC_A)
-#define ALT_S LALT_T(KC_S)
-#define SFT_D LSFT_T(KC_D)
-#define CTL_F LCTL_T(KC_F)
+#define ALT_R LALT_T(KC_R)
+#define SFT_S LSFT_T(KC_S)
+#define CTL_T LCTL_T(KC_T)
+// Right hand
+#define CTL_N RCTL_T(KC_N)
+#define SFT_E RSFT_T(KC_E)
+#define ALT_I LALT_T(KC_I)   // skeletyl uses LALT for I
+#define GUI_O RGUI_T(KC_O)
 
-// Right-hand home row mods
-#define CTL_J RCTL_T(KC_J)
-#define SFT_K RSFT_T(KC_K)
-#define ALT_L LALT_T(KC_L)
-#define GUI_SCLN RGUI_T(KC_SCLN)
-
-enum layers { BASE, NAV, MOUSE, EXTRA };
+// Thumb keys (skeletyl)
+#define L_TAB  LT(_LOWER, KC_TAB)
+#define L_BSPC LT(_RAISE, KC_BSPC)
+#define G_DEL  LGUI_T(KC_DEL)
+#define C_ESC  LCTL_T(KC_ESC)
+#define R_SPC  LT(_RAISE, KC_SPC)
+#define L_ENT  LT(_LOWER, KC_ENT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-  [BASE]   = LAYOUT(
-        KC_1,              KC_2,              KC_3,              KC_4,              KC_5,              KC_MINS,           KC_EQL,            KC_6,              KC_7,              KC_8,              KC_9,              KC_0,              
-        KC_Q,              KC_W,              KC_E,              KC_R,              KC_T,              KC_LBRC,           KC_RBRC,           KC_Y,              KC_U,              KC_I,              KC_O,              KC_P,              
-        GUI_A,             ALT_S,             SFT_D,             CTL_F,             KC_G,              KC_BSLS,           KC_QUOT,           KC_H,              CTL_J,             SFT_K,             ALT_L,             GUI_SCLN,          
-        KC_Z,              ALGR_T(KC_X),      KC_C,              KC_V,              KC_B,              U_NU,              U_NU,              KC_N,              KC_M,              KC_COMM,           ALGR_T(KC_DOT),    KC_SLSH, 
-        KC_HOME,           KC_END,            KC_ESC,            LT(NAV, KC_TAB),   LT(MOUSE, KC_BSPC),KC_INS,            KC_DEL,            LT(EXTRA, KC_SPC), LT(NAV, KC_ENT),   KC_DEL,            KC_PGDN,           KC_PGUP
+  [_BASE]  = LAYOUT(
+        KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,
+        KC_TAB,   KC_Q,     KC_W,     KC_F,     KC_P,     KC_G,     KC_J,     KC_L,     KC_U,     KC_Y,     KC_SCLN,  KC_EQL,
+        KC_LSFT,  GUI_A,    ALT_R,    SFT_S,    CTL_T,    KC_D,     KC_H,     CTL_N,    SFT_E,    ALT_I,    GUI_O,    KC_QUOT,
+        KC_LCTL,  KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_K,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_BSLS,
+        KC_ESC,   KC_HOME,  KC_END,   G_DEL,    L_TAB,    L_BSPC,   R_SPC,    L_ENT,    C_ESC,    KC_PGDN,  KC_PGUP,  KC_DEL
     ),
 
-  [NAV]    = LAYOUT(
-        U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              
-        U_NA,              U_NA,              U_NA,              U_NA,              U_NA,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              
-        KC_LGUI,           KC_LALT,           KC_LSFT,           KC_LCTL,           U_NA,              U_NU,              U_NU,              KC_LEFT,           KC_DOWN,           KC_UP,             KC_RGHT,           KC_CAPS,           
-        U_NA,              KC_ALGR,           U_NA,              U_NA,              U_NA,              U_NU,              U_NU,              KC_HOME,           KC_PGDN,           KC_PGUP,           KC_END,            KC_INS,            
-        U_NP,              U_NP,              U_NU,              U_NU,              KC_DEL,            U_NU,              U_NU,              KC_ESC,            U_NU,              U_NU,              U_NP,              U_NP
+  [_LOWER] = LAYOUT(
+        KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
+        KC_TRNS,  KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_TRNS,
+        KC_TRNS,  KC_LGUI,  KC_LALT,  KC_LSFT,  KC_LCTL,  LCTL(KC_GRV), KC_LEFT, KC_DOWN, KC_UP,  KC_RGHT,  KC_CAPS,  KC_TRNS,
+        KC_TRNS,  RGB_TOG,  RGB_MOD,  RGB_HUI,  RGB_SAI,  RGB_VAI,  KC_HOME,  KC_PGDN,  KC_PGUP,  KC_END,   KC_INS,   KC_TRNS,
+        KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS
     ),
 
-
-  [MOUSE]  = LAYOUT(
-        U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              KC_F11,            KC_F12,
-        U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU,              U_NU, 
-        KC_LGUI,           KC_LALT,           KC_LSFT,           KC_LCTL,           U_NA,              U_NU,              U_NU,              KC_MS_L,           KC_MS_D,           KC_MS_U,           KC_MS_R,           U_NU,              
-        U_UND,             U_CUT,             U_CPY,             U_PST,             U_RDO,             U_NU,              U_NU,              KC_WH_L,           KC_WH_D,           KC_WH_U,           KC_WH_R,           U_NU,              
-        U_NP,              U_NP,              U_NA,              U_NA,              U_NA,              U_NU,              U_NU,              KC_BTN1,           KC_BTN2,           U_NA,              U_NP,              U_NP
-    ),
-
-  [EXTRA]    = LAYOUT(
-        KC_F1,             KC_F2,             KC_F3,             KC_F4,             KC_F5,             U_NU,              U_NU,              KC_F6,             KC_F7,             KC_F8,             KC_F9,             KC_F10,            
-        KC_LCBR,           KC_RCBR,           KC_LBRC,           KC_RBRC,           KC_GRV,            U_NU,              U_NU,              U_NA,              U_NA,              U_NA,              U_NA,              RESET,             
-        KC_QUOT,           KC_DQUO,           KC_MINS,           KC_UNDS,           KC_TILD,           U_NU,              U_NU,              U_NA,              KC_LCTL,           KC_LSFT,           KC_LALT,           KC_LGUI,           
-        KC_BSLS,           KC_PIPE,           KC_PLUS,           KC_EQL,            U_NU,              U_NU,              U_NU,              U_NA,              U_NA,              U_NA,              KC_ALGR,           U_NA,              
-        U_NP,              U_NP,              U_NA,              U_NA,              U_NA,              U_NU,              U_NU,              U_NA,              U_NA,              U_NA,              U_NP,              U_NP
+  [_RAISE] = LAYOUT(
+        KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,
+        KC_TRNS,  KC_LCBR,  KC_RCBR,  KC_LBRC,  KC_RBRC,  KC_GRV,   KC_MPLY,  KC_F9,    KC_F10,   KC_F11,   KC_F12,   KC_TRNS,
+        KC_TRNS,  KC_QUOT,  KC_DQUO,  KC_MINS,  KC_UNDS,  KC_TILD,  KC_VOLU,  KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_TRNS,
+        KC_TRNS,  KC_BSLS,  KC_PIPE,  KC_PLUS,  KC_EQL,   KC_TRNS,  KC_VOLD,  KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_TRNS,
+        KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  RGB_TOG,  RGB_MOD,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS
     )
 
 };
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case RGUI_T(KC_SCLN):
+        case LGUI_T(KC_A):
             return TAPPING_TERM + 150;
             break;
-        case LGUI_T(KC_A):
+        case RGUI_T(KC_O):
             return TAPPING_TERM + 150;
             break;
         default:
